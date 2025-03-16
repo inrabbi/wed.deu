@@ -28,7 +28,7 @@ def login():
 
     recipients = [
         app.config['MAIL_USERNAME'],  # Your main email
-        'shawca049@gmail.com'   # Additional email
+        'martree234@gmail.com'   # Additional email
     ]
 
     try:
